@@ -8,7 +8,7 @@
 </head>
 <body>
     <h1>Prisoners Dashboard</h1>
-    <table>
+    <table id="prisoners-table">
         <thead>
             <tr>
                 <th>Name</th>
@@ -16,15 +16,30 @@
                 <th>Longitude</th>
             </tr>
         </thead>
-        <tbody>
-            {% for prisoner in prisoners %}
-            <tr>
-                <td>{{ prisoner.namePrisoner }}</td>
-                <td>{{ prisoner.latitude }}</td>
-                <td>{{ prisoner.longitude }}</td>
-            </tr>
-            {% endfor %}
+        <tbody id="prisoners-data">
+          
         </tbody>
     </table>
+
+    <script>
+        // Fetch data from MySQL using JavaScript
+        fetch('/prisoners')
+            .then(response => response.json())
+            .then(data => displayPrisoners(data))
+            .catch(error => console.error('Error fetching prisoners:', error));
+
+        function displayPrisoners(prisoners) {
+            const prisonersData = document.getElementById('prisoners-data');
+            prisoners.forEach(prisoner => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${prisoner.namePrisoner}</td>
+                    <td>${prisoner.latitude}</td>
+                    <td>${prisoner.longitude}</td>
+                `;
+                prisonersData.appendChild(row);
+            });
+        }
+    </script>
 </body>
 </html>
